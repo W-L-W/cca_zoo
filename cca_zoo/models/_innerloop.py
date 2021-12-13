@@ -4,10 +4,7 @@ from itertools import combinations
 
 import numpy as np
 from sklearn.exceptions import ConvergenceWarning
-from sklearn.linear_model import (
-    ElasticNet,
-    SGDRegressor,
-)
+from sklearn.linear_model import ElasticNet, SGDRegressor, LinearRegression, Ridge
 from sklearn.utils._testing import ignore_warnings
 from sklearn.utils.validation import check_random_state
 
@@ -274,6 +271,14 @@ class _ElasticInnerLoop(_PLSInnerLoop):
                         tol=self.tol,
                         warm_start=True,
                         random_state=self.random_state,
+                    )
+                )
+            elif alpha == 0:
+                self.regressors.append(
+                    Ridge(
+                        alpha=self.tol,
+                        fit_intercept=False,
+                        positive=positive,
                     )
                 )
             else:

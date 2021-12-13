@@ -27,12 +27,9 @@ class CCALightning(LightningModule):
         self.model = model
         self.sanity_check = True
 
-    def forward(self, *args):
-        z = self.encode(*args)
+    def forward(self, *args, **kwargs):
+        z = self.model(*args, **kwargs)
         return z
-
-    def loss(self, *args, **kwargs):
-        return self.model.loss(*args, **kwargs)
 
     def configure_optimizers(self):
         if isinstance(self.hparams.optimizer, torch.optim.Optimizer):
@@ -52,16 +49,19 @@ class CCALightning(LightningModule):
     def training_step(self, batch, batch_idx):
         data, label = batch
         loss = self.model.loss(*data)
+        self.log("train loss", loss)
         return loss
 
     def validation_step(self, batch, batch_idx):
         data, label = batch
         loss = self.model.loss(*data)
+        self.log("val loss", loss)
         return loss
 
     def test_step(self, batch, batch_idx):
         data, label = batch
         loss = self.model.loss(*data)
+        self.log("test loss", loss)
         return loss
 
     def on_train_epoch_end(self, unused: Optional = None) -> None:
