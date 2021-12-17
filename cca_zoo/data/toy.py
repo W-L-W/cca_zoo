@@ -43,8 +43,7 @@ class Split_MNIST_Dataset(Dataset):
         x = self.data[idx].flatten()
         x_a = x[:392] / 255
         x_b = x[392:] / 255
-        label = self.targets[idx]
-        return (x_a, x_b), label
+        return x_a, x_b
 
     def to_numpy(self, indices=None):
         """
@@ -56,13 +55,11 @@ class Split_MNIST_Dataset(Dataset):
             indices = np.arange(self.__len__())
         view_1 = np.zeros((len(indices), 392))
         view_2 = np.zeros((len(indices), 392))
-        labels = np.zeros(len(indices)).astype(int)
         for i, n in enumerate(indices):
             sample = self[n]
             view_1[i] = sample[0][0].numpy()
             view_2[i] = sample[0][1].numpy()
-            labels[i] = sample[1].numpy().astype(int)
-        return (view_1, view_2), labels
+        return view_1, view_2
 
 
 class Noisy_MNIST_Dataset(Dataset):
@@ -146,7 +143,7 @@ class Noisy_MNIST_Dataset(Dataset):
         if self.flatten:
             x_a = torch.flatten(x_a)
             x_b = torch.flatten(x_b)
-        return (x_b, x_a), label
+        return x_b, x_a
 
 
 class Tangled_MNIST_Dataset(Dataset):
@@ -213,7 +210,7 @@ class Tangled_MNIST_Dataset(Dataset):
         if self.flatten:
             x_a = torch.flatten(x_a)
             x_b = torch.flatten(x_b)
-        return (x_b, x_a), label
+        return x_b, x_a
 
 
 def _add_mnist_noise(x):
