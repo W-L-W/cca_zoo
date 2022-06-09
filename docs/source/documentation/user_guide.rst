@@ -25,7 +25,7 @@ to use a data driven approach.
 .. sourcecode:: python
 
    from cca_zoo.models import rCCA
-   from cca_zoo.model_selection import GridsearchCV
+   from cca_zoo.model_selection import GridSearchCV
 
     def scorer(estimator,X):
       dim_corrs=estimator.score(X)
